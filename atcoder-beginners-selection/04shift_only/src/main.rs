@@ -15,7 +15,7 @@ fn main() {
     let mut times = 0;
     loop {
         // println!("times: {}, values: {:?}", times, nums);
-        let res = half(&nums);
+        let res = half(nums);
         match res {
             Ok(v) => {
                 nums = v;
@@ -27,7 +27,7 @@ fn main() {
     println!("{}", times);
 }
 
-fn half(nums: &Vec<i32>) -> Result<Vec<i32>, &str> {
+fn half(nums: Vec<i32>) -> Result<Vec<i32>, &'static str> {
     nums.iter()
         .map(|x| {
             if x % 2 != 0 {
