@@ -10,4 +10,8 @@ fn main() {
     let total = ite.next().unwrap().unwrap().parse::<i32>().unwrap();
 
     println!("500:{}, 100:{},50:{}, total:{}", c500, c100, c50, total);
+
+    for x in (0..=c500).rev() {
+        println!("{}", x);
+    }
 }
