@@ -41,8 +41,8 @@ fn main() {
                 let total = totalize(n500, n100, n50);
                 let shortage = expected - total;
                 println!(
-                    "{}, {}, {}, total:{}, shortage:{}",
-                    n500, n100, n50, total, shortage
+                    "{}, {}, {}, total:{}, shortage:{}, max50:{}",
+                    n500, n100, n50, total, shortage, max50
                 );
                 if shortage == 0 {
                     matches += 1;
@@ -74,5 +74,5 @@ fn raise(ceil: i32, unit: i32, max: i32) -> i32 {
             return x - 1;
         }
     }
-    0
+    max
 }
