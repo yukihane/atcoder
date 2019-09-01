@@ -35,7 +35,7 @@ fn main() {
                 let shortage = expected - total;
                 if shortage == 0 {
                     matches += 1;
-                    continue;
+                    break;
                 }
             }
         }
