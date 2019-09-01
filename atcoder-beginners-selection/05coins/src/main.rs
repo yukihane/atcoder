@@ -12,7 +12,7 @@ fn main() {
     let mut matches = 0;
 
     let max500 = raise(expected, 500, c500);
-    for n500 in (0..=max500).rev() {
+    for n500 in (0..(max500 + 1)).rev() {
         let total = totalize(n500, 0, 0);
         let shortage = expected - total;
         if shortage == 0 {
@@ -21,7 +21,7 @@ fn main() {
         }
 
         let max100 = raise(shortage, 100, c100);
-        for n100 in (0..=max100).rev() {
+        for n100 in (0..(max100 + 1)).rev() {
             let total = totalize(n500, n100, 0);
             let shortage = expected - total;
             if shortage == 0 {
@@ -30,7 +30,7 @@ fn main() {
             }
 
             let max50 = raise(shortage, 50, c50);
-            for n50 in (0..=max50).rev() {
+            for n50 in (0..(max50 + 1)).rev() {
                 let total = totalize(n500, n100, n50);
                 let shortage = expected - total;
                 if shortage == 0 {
@@ -55,7 +55,7 @@ fn totalize(n500: i32, n100: i32, n50: i32) -> i32 {
 // unit: 硬貨の単価
 // max: 所持している硬貨の枚数
 fn raise(ceil: i32, unit: i32, max: i32) -> i32 {
-    for x in 0..=max {
+    for x in 0..(max + 1) {
         let total = unit * x;
         if ceil == total {
             return x;
