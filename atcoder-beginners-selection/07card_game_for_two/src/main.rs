@@ -22,14 +22,14 @@ fn calc(input: &mut Vec<i32>) -> i32 {
     //0:alice, 1:bob
     let mut points = [0; 2];
     for (i, item) in input.iter().enumerate() {
-        points[i % 2] += item;
+        points[i % 2] = points[i % 2] + item;
     }
     points[0] - points[1]
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::*;
+    use super::*;
     #[test]
     fn test1() {
         assert_eq!(calc(&mut vec![3, 1]), 2);
