@@ -1,7 +1,19 @@
 use std::collections::HashSet;
+use std::io::{self, BufRead};
 
 fn main() {
-    println!("Hello, world!");
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+    // 1行目読み捨て
+    lines.next();
+
+    let nums = lines
+        .map(|x| x.unwrap().parse::<i32>().unwrap())
+        .collect::<Vec<_>>();
+
+    let res = calc(&nums);
+
+    println!("{}", res);
 }
 
 fn calc(input: &Vec<i32>) -> i32 {
