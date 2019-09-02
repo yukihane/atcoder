@@ -1,5 +1,9 @@
 use std::io::{self, BufRead};
 
+struct Sample {
+    numbers: Vec<i32>,
+}
+
 fn main() {
     let stdin = io::stdin();
     let mut lines = stdin.lock().lines();
@@ -7,10 +11,18 @@ fn main() {
     lines.next();
 
     let str = lines.next().unwrap().unwrap();
-    let mut nums = str
+    let nums = str
         .split_whitespace()
         .map(|x| x.parse::<i32>().unwrap())
         .collect::<Vec<_>>();
+    let sample = Sample { numbers: nums };
+
+    let res = calc(&sample);
+    println!("{}", res);
+}
+
+fn calc(sample: &Sample) -> i32 {
+    let mut nums = sample.numbers.clone();
 
     let mut times = 0;
     loop {
@@ -24,7 +36,7 @@ fn main() {
             Err(_) => break,
         };
     }
-    println!("{}", times);
+    times
 }
 
 fn half(nums: &Vec<i32>) -> Result<Vec<i32>, &'static str> {
@@ -36,4 +48,12 @@ fn half(nums: &Vec<i32>) -> Result<Vec<i32>, &'static str> {
             Ok(x / 2)
         })
         .collect()
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn it_works() {
+        assert_eq!(2 + 2, 4);
+    }
 }
