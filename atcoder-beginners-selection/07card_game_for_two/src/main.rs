@@ -1,14 +1,23 @@
+use std::io::{self, BufRead};
+
 fn main() {
-    println!("Hello, world!");
+    let stdin = io::stdin();
+    let mut ite = stdin.lock().lines();
+    // 1行目読み捨て
+    ite.next();
+    let str = ite.next().unwrap().unwrap();
+    let mut input = str
+        .split_whitespace()
+        .map(|x| x.parse::<i32>().unwrap())
+        .collect::<Vec<_>>();
+
+    let res = calc(&mut input);
+
+    println!("{}", res);
 }
 
 fn calc(input: &mut Vec<i32>) -> i32 {
     input.sort_by_key(|x| x * -1);
-
-    let foo = vec![1, 35, 64, 36, 26];
-    for (i, item) in foo.iter().enumerate() {
-        println!("The {}th item is {}", i + 1, item);
-    }
 
     //0:alice, 1:bob
     let mut points = [0; 2];
