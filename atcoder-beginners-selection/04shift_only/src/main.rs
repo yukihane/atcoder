@@ -1,7 +1,8 @@
 use std::io::{self, BufRead};
 
-struct Sample {
-    numbers: Vec<i32>,
+#[derive(Debug)]
+pub struct Sample<'a> {
+    numbers: &'a Vec<i32>,
 }
 
 fn main() {
@@ -15,7 +16,7 @@ fn main() {
         .split_whitespace()
         .map(|x| x.parse::<i32>().unwrap())
         .collect::<Vec<_>>();
-    let sample = Sample { numbers: nums };
+    let sample = Sample { numbers: &nums };
 
     let res = calc(&sample);
     println!("{}", res);
@@ -26,7 +27,7 @@ fn calc(sample: &Sample) -> i32 {
 
     let mut times = 0;
     loop {
-        // println!("times: {}, values: {:?}", times, nums);
+        println!("times: {}, values: {:?}", times, nums);
         let res = half(&nums);
         match res {
             Ok(v) => {
@@ -52,8 +53,34 @@ fn half(nums: &Vec<i32>) -> Result<Vec<i32>, &'static str> {
 
 #[cfg(test)]
 mod tests {
+    use crate::*;
     #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+    fn test1() {
+        let data = [(vec![8, 12, 40], 2)];
+        for x in &data {
+            let input = Sample { numbers: &x.0 };
+            println!("input: {:?}", input);
+            let result = calc(&input);
+            println!("result: {}", result);
+            assert_eq!(result, x.1);
+        }
+    }
+    #[test]
+    fn test2() {
+        let input = Sample {
+            numbers: &vec![5, 6, 8, 10],
+        };
+        let result = calc(&input);
+        assert_eq!(result, 0);
+    }
+    #[test]
+    fn test3() {
+        let input = Sample {
+            numbers: &vec![
+                382253568, 723152896, 37802240, 379425024, 404894720, 471526144,
+            ],
+        };
+        let result = calc(&input);
+        assert_eq!(result, 8);
     }
 }
