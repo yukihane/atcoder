@@ -1,3 +1,6 @@
+use std::fmt;
+use std::io::{self, BufRead};
+
 struct Input {
     // お札の枚数
     count: i32,
@@ -15,8 +18,23 @@ struct Output {
     one: i32,
 }
 
+impl fmt::Display for Output {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{} {} {}", self.ten, self.five, self.one)
+    }
+}
+
 fn main() {
-    println!("Hello, world!");
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+    let line = lines.next().unwrap().unwrap();
+    let mut nums = line.split_whitespace();
+    let n = nums.next().unwrap().parse::<i32>().unwrap();
+    let y = nums.next().unwrap().parse::<i32>().unwrap();
+    let input = Input { count: n, total: y };
+    let res = calc(&input);
+
+    println!("{}", res);
 }
 
 fn calc(input: &Input) -> Output {
