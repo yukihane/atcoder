@@ -38,6 +38,33 @@ fn main() {
 }
 
 fn calc(input: &Input) -> Output {
+    let max_ten = raise(input.total, 10000, input.count);
+    for i in (0..(max_ten + 1)).rev() {
+        let mut counter = Output {
+            ten: 0,
+            five: 0,
+            one: 0,
+        };
+        counter.ten = i;
+
+        let remain_total = input.total - totalize(&counter);
+        let remain_count = input.count - (counter.ten + counter.five + counter.one);
+        let max_five = raise(remain_total, 5000, remain_count);
+        for j in (0..(max_five + 1)).rev() {
+            counter.five = j;
+
+            let remain_total = input.total - totalize(&counter);
+            let remain_count = input.count - (counter.ten + counter.five + counter.one);
+            let max_one = raise(remain_total, 1000, remain_count);
+
+            counter.one = max_one;
+            let remain_total = input.total - totalize(&counter);
+            let remain_count = input.count - (counter.ten + counter.five + counter.one);
+            if remain_total == 0 && remain_count == 0 {
+                return counter;
+            }
+        }
+    }
     for ten in 0..(2000 + 1) {
         if ten * 10000 > input.total {
             break;
@@ -73,6 +100,24 @@ fn calc(input: &Input) -> Output {
     }
 }
 
+fn totalize(nums: &Output) -> i32 {
+    10000 * nums.ten + 5000 * nums.five + 1000 * nums.one
+}
+
+// ceil: 求めたい上限値
+// unit: 硬貨の単価
+// max: 所持している硬貨の枚数
+fn raise(ceil: i32, unit: i32, max: i32) -> i32 {
+    for x in 0..(max + 1) {
+        let total = unit * x;
+        if ceil == total {
+            return x;
+        } else if ceil < total {
+            return x - 1;
+        }
+    }
+    max
+}
 #[cfg(test)]
 mod test {
     use super::*;
@@ -86,9 +131,9 @@ mod test {
         assert_eq!(
             output,
             Output {
-                ten: 0,
-                five: 9,
-                one: 0
+                ten: 4,
+                five: 0,
+                one: 5
             }
         );
     }
