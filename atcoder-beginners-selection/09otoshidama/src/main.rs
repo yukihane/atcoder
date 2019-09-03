@@ -39,6 +39,7 @@ fn main() {
 
 fn calc(input: &Input) -> Output {
     let max_ten = raise(input.total, 10000, input.count);
+    // println!("max_ten: {}", max_ten);
     for i in (0..(max_ten + 1)).rev() {
         let mut counter = Output {
             ten: 0,
@@ -50,12 +51,15 @@ fn calc(input: &Input) -> Output {
         let remain_total = input.total - totalize(&counter);
         let remain_count = input.count - (counter.ten + counter.five + counter.one);
         let max_five = raise(remain_total, 5000, remain_count);
+        // println!("max_five: {}", max_five);
         for j in (0..(max_five + 1)).rev() {
             counter.five = j;
+            counter.one = 0;
 
             let remain_total = input.total - totalize(&counter);
             let remain_count = input.count - (counter.ten + counter.five + counter.one);
             let max_one = raise(remain_total, 1000, remain_count);
+            // println!("max_one: {}", max_one);
 
             counter.one = max_one;
             let remain_total = input.total - totalize(&counter);
@@ -63,34 +67,10 @@ fn calc(input: &Input) -> Output {
             if remain_total == 0 && remain_count == 0 {
                 return counter;
             }
-        }
-    }
-    for ten in 0..(2000 + 1) {
-        if ten * 10000 > input.total {
-            break;
-        } else if ten > input.count {
-            break;
-        }
-        for five in 0..(2000 + 1) {
-            if ten * 10000 + five * 5000 > input.total {
-                break;
-            } else if ten + five > input.count {
-                break;
-            }
-            for one in 0..(2000 + 1) {
-                let actual = 10000 * ten + 5000 * five + 1000 * one;
-                if actual > input.total {
-                    break;
-                } else if ten + five + one > input.count {
-                    break;
-                } else if actual == input.total && ten + five + one == input.count {
-                    return Output {
-                        ten: ten,
-                        five: five,
-                        one: one,
-                    };
-                }
-            }
+            // println!(
+            //     "ten:{}, five:{}, one:{}, count:{}, total:{}",
+            //     counter.ten, counter.five, counter.one, remain_count, remain_total
+            // );
         }
     }
     Output {
@@ -163,9 +143,9 @@ mod test {
         assert_eq!(
             output,
             Output {
-                ten: 2,
-                five: 54,
-                one: 944
+                ten: 26,
+                five: 0,
+                one: 974
             }
         );
     }
