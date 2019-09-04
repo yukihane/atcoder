@@ -38,41 +38,24 @@ fn main() {
 }
 
 fn calc(input: &Input) -> Output {
-    let max_ten = raise(input.total, 10000, input.count);
-    // println!("max_ten: {}", max_ten);
-    for i in (0..(max_ten + 1)).rev() {
-        let mut counter = Output {
-            ten: 0,
-            five: 0,
-            one: 0,
-        };
-        counter.ten = i;
-
-        let remain_total = input.total - totalize(&counter);
-        let remain_count = input.count - (counter.ten + counter.five + counter.one);
-        let max_five = raise(remain_total, 5000, remain_count);
-        // println!("max_five: {}", max_five);
-        for j in (0..(max_five + 1)).rev() {
-            counter.five = j;
-            counter.one = 0;
-
-            let remain_total = input.total - totalize(&counter);
-            let remain_count = input.count - (counter.ten + counter.five + counter.one);
-            let max_one = raise(remain_total, 1000, remain_count);
-            // println!("max_one: {}", max_one);
-
-            counter.one = max_one;
-            let remain_total = input.total - totalize(&counter);
-            let remain_count = input.count - (counter.ten + counter.five + counter.one);
-            if remain_total == 0 && remain_count == 0 {
-                return counter;
+    for x in (0..(input.count + 1)).rev() {
+        let total = totalize(x, 0, 0);
+        if total > input.total {
+            continue;
+        }
+        let remain = input.count - x;
+        for y in (0..(remain + 1)).rev() {
+            let total = totalize(x, y, remain - y);
+            if total == input.total {
+                return Output {
+                    ten: x,
+                    five: y,
+                    one: remain - y,
+                };
             }
-            // println!(
-            //     "ten:{}, five:{}, one:{}, count:{}, total:{}",
-            //     counter.ten, counter.five, counter.one, remain_count, remain_total
-            // );
         }
     }
+
     Output {
         ten: -1,
         five: -1,
@@ -80,24 +63,10 @@ fn calc(input: &Input) -> Output {
     }
 }
 
-fn totalize(nums: &Output) -> i32 {
-    10000 * nums.ten + 5000 * nums.five + 1000 * nums.one
+fn totalize(ten: i32, five: i32, one: i32) -> i32 {
+    10000 * ten + 5000 * five + 1000 * one
 }
 
-// ceil: 求めたい上限値
-// unit: 硬貨の単価
-// max: 所持している硬貨の枚数
-fn raise(ceil: i32, unit: i32, max: i32) -> i32 {
-    for x in 0..(max + 1) {
-        let total = unit * x;
-        if ceil == total {
-            return x;
-        } else if ceil < total {
-            return x - 1;
-        }
-    }
-    max
-}
 #[cfg(test)]
 mod test {
     use super::*;
@@ -113,7 +82,7 @@ mod test {
             Output {
                 ten: 4,
                 five: 0,
-                one: 5
+                one: 5,
             }
         );
     }
@@ -129,7 +98,7 @@ mod test {
             Output {
                 ten: -1,
                 five: -1,
-                one: -1
+                one: -1,
             }
         );
     }
@@ -145,10 +114,11 @@ mod test {
             Output {
                 ten: 26,
                 five: 0,
-                one: 974
+                one: 974,
             }
         );
     }
+
     #[test]
     fn test4() {
         let output = calc(&Input {
@@ -160,9 +130,8 @@ mod test {
             Output {
                 ten: 2000,
                 five: 0,
-                one: 0
+                one: 0,
             }
         );
     }
-
 }
