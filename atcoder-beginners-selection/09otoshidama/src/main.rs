@@ -32,12 +32,13 @@ fn main() {
     let n = nums.next().unwrap().parse::<i32>().unwrap();
     let y = nums.next().unwrap().parse::<i32>().unwrap();
     let input = Input { count: n, total: y };
-    let res = calc(&input);
-
-    println!("{}", res);
+    match calc(&input) {
+        Some(res) => println!("{}", res),
+        None => println!("-1 -1 -1"),
+    }
 }
 
-fn calc(input: &Input) -> Output {
+fn calc(input: &Input) -> Option<Output> {
     for x in (0..(input.count + 1)).rev() {
         let total = totalize(x, 0, 0);
         if total > input.total {
@@ -47,20 +48,15 @@ fn calc(input: &Input) -> Output {
         for y in (0..(remain + 1)).rev() {
             let total = totalize(x, y, remain - y);
             if total == input.total {
-                return Output {
+                return Some(Output {
                     ten: x,
                     five: y,
                     one: remain - y,
-                };
+                });
             }
         }
     }
-
-    Output {
-        ten: -1,
-        five: -1,
-        one: -1,
-    }
+    None
 }
 
 fn totalize(ten: i32, five: i32, one: i32) -> i32 {
@@ -79,11 +75,11 @@ mod test {
         });
         assert_eq!(
             output,
-            Output {
+            Some(Output {
                 ten: 4,
                 five: 0,
                 one: 5,
-            }
+            })
         );
     }
 
@@ -93,14 +89,7 @@ mod test {
             count: 20,
             total: 196000,
         });
-        assert_eq!(
-            output,
-            Output {
-                ten: -1,
-                five: -1,
-                one: -1,
-            }
-        );
+        assert_eq!(output, None);
     }
 
     #[test]
@@ -111,11 +100,11 @@ mod test {
         });
         assert_eq!(
             output,
-            Output {
+            Some(Output {
                 ten: 26,
                 five: 0,
                 one: 974,
-            }
+            })
         );
     }
 
@@ -127,11 +116,11 @@ mod test {
         });
         assert_eq!(
             output,
-            Output {
+            Some(Output {
                 ten: 2000,
                 five: 0,
                 one: 0,
-            }
+            })
         );
     }
 }
