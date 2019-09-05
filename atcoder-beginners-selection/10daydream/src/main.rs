@@ -13,58 +13,33 @@ fn main() {
 fn calc(text: &str) -> bool {
     let mut input = text;
     loop {
-        // println!("{}", input);
         if input.len() == 0 {
             return true;
-        } else if input.len() < 5 {
-            // 今回の単語は最小でも文字数5
-            return false;
-        } else if input.starts_with("dream") {
-            match pop_dream(input) {
-                Ok(res) => input = res,
-                Err(_) => return false,
-            }
-        } else if input.starts_with("erase") {
-            match pop_erase(input) {
-                Ok(res) => input = res,
-                Err(_) => return false,
-            }
-        } else {
-            return false;
+        }
+        match next(
+            &input,
+            &vec!["dream", "dreamer", "erase", "eraser"],
+            &vec!["dream", "erase"],
+        ) {
+            Ok(res) => input = res,
+            Err(_) => return false,
         }
     }
 }
 
-fn pop_dream(text: &str) -> Result<&str, &'static str> {
-    // println!("pop_dream");
-    if text == "dream" || text == "dreamer" {
-        // println!("OK!");
-        return Ok("");
-    }
-    let skipped = &text["dream".len()..];
-    if skipped.starts_with("dream") || skipped.starts_with("erase") {
-        // println!("x: {}", skipped);
-        return Ok(skipped);
-    }
-    let skipped = &text["dreamer".len()..];
-    if skipped.starts_with("dream") || skipped.starts_with("erase") {
-        // println!("y: {}", skipped);
-        return Ok(skipped);
-    }
-    Err("not match")
-}
-
-fn pop_erase(text: &str) -> Result<&str, &'static str> {
-    if text == "erase" || text == "eraser" {
-        return Ok("");
-    }
-    let skipped = &text["erase".len()..];
-    if skipped.starts_with("dream") || skipped.starts_with("erase") {
-        return Ok(skipped);
-    }
-    let skipped = &text["eraser".len()..];
-    if skipped.starts_with("dream") || skipped.starts_with("erase") {
-        return Ok(skipped);
+fn next<'a>(text: &'a str, begin: &Vec<&str>, next: &Vec<&str>) -> Result<&'a str, &'static str> {
+    for b in begin {
+        if text.starts_with(b) {
+            let follow_text = &text[b.len()..];
+            if follow_text.len() == 0 {
+                return Ok("");
+            }
+            for n in next {
+                if follow_text.starts_with(n) {
+                    return Ok(&text[b.len()..]);
+                }
+            }
+        }
     }
     Err("not match")
 }
