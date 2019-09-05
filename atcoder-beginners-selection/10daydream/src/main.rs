@@ -42,12 +42,12 @@ fn pop_dream(text: &str) -> Result<&str, &'static str> {
         return Ok("");
     }
     let skipped = &text["dream".len()..];
-    if skipped.starts_with("d") || skipped.starts_with("era") {
+    if skipped.starts_with("dream") || skipped.starts_with("erase") {
         // println!("x: {}", skipped);
         return Ok(skipped);
     }
     let skipped = &text["dreamer".len()..];
-    if skipped.starts_with("d") || skipped.starts_with("e") {
+    if skipped.starts_with("dream") || skipped.starts_with("erase") {
         // println!("y: {}", skipped);
         return Ok(skipped);
     }
@@ -59,11 +59,11 @@ fn pop_erase(text: &str) -> Result<&str, &'static str> {
         return Ok("");
     }
     let skipped = &text["erase".len()..];
-    if skipped.starts_with("d") || skipped.starts_with("e") {
+    if skipped.starts_with("dream") || skipped.starts_with("erase") {
         return Ok(skipped);
     }
     let skipped = &text["eraser".len()..];
-    if skipped.starts_with("d") || skipped.starts_with("e") {
+    if skipped.starts_with("dream") || skipped.starts_with("erase") {
         return Ok(skipped);
     }
     Err("not match")
