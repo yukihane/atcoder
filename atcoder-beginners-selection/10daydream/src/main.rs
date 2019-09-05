@@ -1,7 +1,13 @@
+use std::io::{self, BufRead};
+
 fn main() {
-    let text = "Hello, world!".chars().collect::<Vec<char>>();
-    println!("{:?}", text);
-    calc("erasedream");
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+    let text = lines.next().unwrap().unwrap();
+    match calc(&text) {
+        true => println!("YES"),
+        false => println!("NO"),
+    }
 }
 
 fn calc(text: &str) -> bool {
