@@ -1,3 +1,5 @@
+use std::io::{self, BufRead};
+
 struct Record {
     time: i32,
     x: i32,
@@ -5,7 +7,30 @@ struct Record {
 }
 
 fn main() {
-    println!("Hello, world!");
+    let stdin = io::stdin();
+    let mut lines = stdin.lock().lines();
+    let l: i32 = lines.next().unwrap().unwrap().parse().unwrap();
+    let mut points = vec![Record {
+        time: 0,
+        x: 0,
+        y: 0,
+    }];
+    for _ in 0..l {
+        let line = lines.next().unwrap().unwrap();
+        let mut nums = line.split_whitespace();
+        let time: i32 = nums.next().unwrap().parse().unwrap();
+        let x: i32 = nums.next().unwrap().parse().unwrap();
+        let y: i32 = nums.next().unwrap().parse().unwrap();
+        points.push(Record {
+            time: time,
+            x: x,
+            y: y,
+        });
+    }
+    match calc(&points) {
+        true => println!("Yes"),
+        false => println!("No"),
+    }
 }
 
 fn calc(records: &Vec<Record>) -> bool {
