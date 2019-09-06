@@ -1,5 +1,5 @@
 struct Record {
-    time: u32,
+    time: i32,
     x: i32,
     y: i32,
 }
@@ -14,7 +14,12 @@ fn calc(records: &Vec<Record>) -> bool {
 
 fn can_checkin(current: &Record, next: &Record) -> bool {
     let distance = measure(current, next);
-    false
+    let time = next.time - current.time;
+    let remain_time = time - distance;
+    if remain_time < 0 || remain_time % 2 != 0 {
+        return false;
+    }
+    true
 }
 
 fn measure(p1: &Record, p2: &Record) -> i32 {
@@ -70,6 +75,21 @@ mod tests {
                 time: 3,
                 x: 1,
                 y: 2,
+            },
+        ));
+    }
+    #[test]
+    fn test_checkin2() {
+        assert!(can_checkin(
+            &Record {
+                time: 3,
+                x: 1,
+                y: 2,
+            },
+            &Record {
+                time: 6,
+                x: 1,
+                y: 1
             },
         ));
     }
