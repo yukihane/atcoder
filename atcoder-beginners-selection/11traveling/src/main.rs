@@ -9,7 +9,15 @@ fn main() {
 }
 
 fn calc(records: &Vec<Record>) -> bool {
-    false
+    let size = records.len();
+    for i in 0..(size - 1) {
+        let current = &records[i];
+        let next = &records[i + 1];
+        if !can_checkin(current, next) {
+            return false;
+        }
+    }
+    true
 }
 
 fn can_checkin(current: &Record, next: &Record) -> bool {
@@ -31,6 +39,65 @@ fn measure(p1: &Record, p2: &Record) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    #[test]
+    fn test1() {
+        let points = vec![
+            Record {
+                time: 0,
+                x: 0,
+                y: 0,
+            },
+            Record {
+                time: 3,
+                x: 1,
+                y: 2,
+            },
+            Record {
+                time: 6,
+                x: 1,
+                y: 1,
+            },
+        ];
+
+        assert!(calc(&points));
+    }
+    #[test]
+    fn test2() {
+        let points = vec![
+            Record {
+                time: 0,
+                x: 0,
+                y: 0,
+            },
+            Record {
+                time: 2,
+                x: 100,
+                y: 100,
+            },
+        ];
+        assert!(!calc(&points));
+    }
+    #[test]
+    fn test3() {
+        let points = vec![
+            Record {
+                time: 0,
+                x: 0,
+                y: 0,
+            },
+            Record {
+                time: 5,
+                x: 1,
+                y: 1,
+            },
+            Record {
+                time: 100,
+                x: 1,
+                y: 1,
+            },
+        ];
+        assert!(!calc(&points));
+    }
     #[test]
     fn test_measure1() {
         let distance = measure(
