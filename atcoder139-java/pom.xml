@@ -39,7 +39,7 @@
           </execution>
         </executions>
         <configuration>
-          <mainClass>com.github.yukihane.atcoder.Main</mainClass>
+          <mainClass>Main</mainClass>
         </configuration>
       </plugin>
     </plugins>
