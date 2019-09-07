@@ -7,6 +7,7 @@ public class Main {
         switch (p) {
         case 4:
             P4.answer();
+            break;
         case 3:
             P3.answer();
             break;
@@ -24,14 +25,17 @@ class P4 {
     static void answer() {
         final Scanner sc = new Scanner(System.in);
         final int n = sc.nextInt();
-        final int[] array = new int[n];
-        for (int i = 0; i < n; i++) {
-            array[i] = sc.nextInt();
-        }
-        final int res = calc(array);
+        final int res = calc(n);
         System.out.println(res);
     }
 
+    static int calc(final int n) {
+        int sum = 0;
+        for (int i = 1; i <= n; i++) {
+            sum += i - 1;
+        }
+        return sum;
+    }
 }
 
 class P3 {

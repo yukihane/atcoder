@@ -25,4 +25,11 @@ public class MainTest {
         assertEquals(3, P3.calc(new int[] { 4, 4, 5, 6, 6, 5, 5 }));
         assertEquals(0, P3.calc(new int[] { 1, 2, 3, 4 }));
     }
+
+    @Test
+    public void test4() {
+        assertEquals(1, P4.calc(2));
+        assertEquals(78, P4.calc(13));
+        assertEquals(0, P4.calc(1));
+    }
 }
