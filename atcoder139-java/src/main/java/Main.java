@@ -1,10 +1,16 @@
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
     public static void main(final String[] args) {
-        final int p = 4;
+        final int p = 5;
         switch (p) {
+        case 5:
+            P5.answer();
+            break;
         case 4:
             P4.answer();
             break;
@@ -18,6 +24,71 @@ public class Main {
             P1.p1();
             break;
         }
+    }
+}
+
+class P5 {
+    static void answer() {
+        final Scanner sc = new Scanner(System.in);
+        final int n = sc.nextInt();
+        final List<LinkedList<Integer>> table = new ArrayList<>(n);
+        for (int i = 0; i < n; i++) {
+            final LinkedList<Integer> ll = new LinkedList<>();
+            table.add(ll);
+            for (int j = 0; j < n - 1; j++) {
+                final int x = sc.nextInt();
+                ll.add(x);
+            }
+        }
+        final int res = calc(table);
+        System.out.println(res);
+    }
+
+    static int calc(final List<LinkedList<Integer>> table) {
+        int days = 0;
+        while (!endGame(table)) {
+            final boolean res = todayMatch(table);
+            if (res) {
+                days++;
+            } else {
+                return -1;
+            }
+        }
+        return days;
+    }
+
+    static boolean endGame(final List<LinkedList<Integer>> table) {
+        for (final LinkedList<Integer> l : table) {
+            if (!l.isEmpty()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    static boolean todayMatch(final List<LinkedList<Integer>> table) {
+        final ArrayList<LinkedList<Integer>> todayTable = new ArrayList<>(table);
+        int myNumber = 0;
+        boolean haveGame = false;
+        while (myNumber <= todayTable.size()) {
+            for (int i = myNumber; i < table.size(); i++) {
+                final LinkedList<Integer> mySchedule = todayTable.get(0);
+                final Integer myOpposition = mySchedule.pop();
+                final LinkedList<Integer> oSchedule = table.get(myOpposition.intValue() - 1);
+                final Integer oo = oSchedule.pop();
+                if (oo.intValue() == i) {
+                    todayTable.remove(myOpposition.intValue() - 1);
+                    todayTable.ensureCapacity(i);
+                    myNumber = i;
+                    haveGame = true;
+                    break;
+                } else {
+                    mySchedule.push(myOpposition);
+                    oSchedule.push(oo);
+                }
+            }
+        }
+        return haveGame;
     }
 }
 
