@@ -1,5 +1,5 @@
 fn main() {
-    let mode = "b";
+    let mode = "c";
 
     if mode == "a" {
         a::answer();
@@ -13,16 +13,44 @@ mod c {
 
     use std::io::*;
 
-    pub fn answer() {}
+    pub fn answer() {
+        let mut buf = String::new();
+        stdin().read_to_string(&mut buf).unwrap();
 
-    fn calc() {}
+        let mut iter = buf.split_whitespace();
+        let _n = iter.next().unwrap().parse::<i32>().unwrap();
+        let v = iter
+            .map(|x| x.parse::<i32>().unwrap())
+            .collect::<Vec<i32>>();
+
+        let res = calc(&v);
+        println!("{}", res);
+    }
+
+    fn calc(v: &Vec<i32>) -> f64 {
+        let mut nums = v.clone();
+        nums.sort();
+        let mut prev = nums[0] as f64;
+        for i in 1..nums.len() {
+            prev = (prev + nums[i] as f64) / 2.0;
+        }
+        prev
+    }
 
     #[cfg(test)]
     mod tests {
         use super::*;
         #[test]
         fn test1() {
-            calc();
+            assert_eq!(3.5, calc(&vec![3, 4]));
+        }
+        #[test]
+        fn test2() {
+            assert_eq!(375.0, calc(&vec![500, 300, 200]));
+        }
+        #[test]
+        fn test3() {
+            assert_eq!(138.0, calc(&vec![138, 138, 138, 138, 138]));
         }
     }
 }
@@ -74,7 +102,7 @@ mod b {
         #[test]
         fn test_b_3() {
             let res = calc(&vec![1000]);
-            assert!(res == 1000.0);
+            assert_eq!(res, 1000.0);
         }
     }
 }
