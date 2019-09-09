@@ -5,6 +5,25 @@ fn main() {
         a::answer();
     } else if mode == "b" {
         b::answer();
+    } else if mode == "c" {
+        c::answer();
+    }
+}
+mod c {
+
+    use std::io::*;
+
+    pub fn answer() {}
+
+    fn calc() {}
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+        #[test]
+        fn test1() {
+            calc();
+        }
     }
 }
 mod b {
