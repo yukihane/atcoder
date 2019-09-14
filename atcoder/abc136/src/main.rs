@@ -1,7 +1,42 @@
 fn main() {
-    let mode = "a";
+    let mode = "b";
     if mode == "a" {
         a::solve();
+    } else if mode == "b" {
+        b::solve();
+    }
+}
+
+mod b {
+    use std;
+    use std::io::Read;
+
+    pub fn solve() {
+        let mut buf = String::new();
+        std::io::stdin().read_to_string(&mut buf).unwrap();
+        let n = buf.split_whitespace().next().unwrap().parse().unwrap();
+        let res = calc(n);
+        println!("{}", res);
+    }
+
+    fn calc(num: i32) -> i32 {
+        let mut base = 10;
+        let mut res = 0;
+        loop {
+            if num >= base {
+                res += base - base / 10;
+                base *= 100;
+            } else {
+                break;
+            }
+        }
+
+        let amari = match num - (base / 10) >= 0 {
+            true => num - (base / 10) + 1,
+            false => 0,
+        };
+
+        res + amari
     }
 }
 
