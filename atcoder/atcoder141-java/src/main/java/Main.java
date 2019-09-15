@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class Main {
 
     public static void main(final String... args) {
-        final String mode = "c";
+        final String mode = "b";
 
         if (mode.equals("a")) {
             A.solve();
@@ -12,6 +12,45 @@ public class Main {
         } else if (mode.contentEquals("c")) {
             C.solve();
         }
+    }
+}
+
+class B {
+    static void solve() {
+        final Scanner sc = new Scanner(System.in);
+        final String str = sc.nextLine();
+        final char[] s = str.toCharArray();
+        final boolean res = calc(s);
+        if (res) {
+            System.out.println("Yes");
+        } else {
+            System.out.println("No");
+        }
+    }
+
+    static boolean calc(final char[] s) {
+        if (cond1(s) && cond2(s)) {
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean cond1(final char[] s) {
+        for (int i = 0; i < s.length; i += 2) {
+            if (s[i] == 'L') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean cond2(final char[] s) {
+        for (int i = 1; i < s.length; i += 2) {
+            if (s[i] == 'R') {
+                return false;
+            }
+        }
+        return true;
     }
 }
 
@@ -42,23 +81,5 @@ class C {
             points[col - 1]++;
         }
         return points;
-     }
-}
-
-class B {
-    static void solve() {
-    }
-}
-
-class A {
-    static void solve() {
-        final Scanner sc = new Scanner(System.in);
-        final int r = sc.nextInt();
-        final int res = calc(r);
-        System.out.println(res);
-    }
-
-    static int calc(final int r) {
-        return 3 * r * r;
     }
 }
