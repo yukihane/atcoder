@@ -1,12 +1,69 @@
 fn main() {
-    let mode = "b";
+    let mode = "c";
     if mode == "a" {
         a::solve();
     } else if mode == "b" {
         b::solve();
+    } else if mode == "c" {
+        c::solve();
     }
 }
+mod c {
+    use std;
+    use std::io::Read;
 
+    pub fn solve() {
+        let mut buf = String::new();
+        std::io::stdin().read_to_string(&mut buf).unwrap();
+        let mut text = buf.split_whitespace();
+        let n = text.next().unwrap().parse().unwrap();
+        let data = text.into_iter().map(|x| x.parse().unwrap()).collect();
+
+        let res = match calc(n, data) {
+            true => "Yes",
+            false => "No",
+        };
+
+        println!("{}", res);
+    }
+    fn calc(n: usize, mut h: Vec<i32>) -> bool {
+        for i in (0..(n - 1)).rev() {
+            match h[i] > h[i + 1] {
+                false => {}
+                true => {
+                    h[i] -= 1;
+                    if h[i] > h[i + 1] {
+                        return false;
+                    }
+                }
+            }
+        }
+
+        true
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn test1() {
+            assert_eq!(true, calc(5, vec![1, 2, 1, 1, 3]));
+        }
+        #[test]
+        fn test2() {
+            assert_eq!(false, calc(4, vec![1, 3, 2, 1]));
+        }
+        #[test]
+        fn test3() {
+            assert_eq!(true, calc(4, vec![1, 2, 3, 4, 5]));
+        }
+        #[test]
+        fn test4() {
+            assert_eq!(true, calc(1, vec![1000000000]));
+        }
+    }
+}
 mod b {
     use std;
     use std::io::Read;
