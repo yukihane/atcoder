@@ -1,7 +1,67 @@
 fn main() {
-    let mode = "a";
+    let mode = "b";
     if mode == "a" {
         a::solve();
+    } else if mode == "b" {
+        b::solve();
+    }
+}
+
+mod b {
+    use std;
+    use std::io::Read;
+
+    pub fn solve() {
+        let mut buf = String::new();
+        std::io::stdin().read_to_string(&mut buf).unwrap();
+
+        let mut text = buf.split_whitespace();
+        text.next();
+
+        let input: Vec<i32> = text.map(|x| x.parse().unwrap()).collect();
+        let res = if calc(input) { "YES" } else { "NO" };
+        println!("{}", res);
+    }
+    fn calc(mut p: Vec<i32>) -> bool {
+        let ng_point = match search_ng(&p) {
+            Some(x) => x,
+            None => return true,
+        };
+        let min_point = match search_min(&p, ng_point + 1) {
+            Some(x) => x,
+            None => return true,
+        };
+        p.swap(ng_point, min_point);
+        is_sorted(p)
+    }
+    fn is_sorted(p: Vec<i32>) -> bool {
+        for i in 0..(p.len() - 1) {
+            if p[i] > p[i + 1] {
+                return false;
+            }
+        }
+        true
+    }
+
+    fn search_ng(p: &Vec<i32>) -> Option<usize> {
+        for i in 0..(p.len() - 1) {
+            if p[i] > p[i + 1] {
+                return Some(i);
+            }
+        }
+        None
+    }
+
+    fn search_min(p: &Vec<i32>, start: usize) -> Option<usize> {
+        let mut min = std::i32::MAX;
+        let mut point = None;
+        for i in start..p.len() {
+            if p[i] < min {
+                min = p[i];
+                point = Some(i);
+            }
+        }
+        point
     }
 }
 
