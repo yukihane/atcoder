@@ -1,9 +1,64 @@
 fn main() {
-    let mode = "b";
+    let mode = "c";
     if mode == "a" {
         a::solve();
     } else if mode == "b" {
         b::solve();
+    } else if mode == "c" {
+        c::solve();
+    }
+}
+
+mod c {
+    use std;
+    use std::io::BufRead;
+
+    pub fn solve() {
+        let stdin = std::io::stdin();
+        let mut lines = stdin.lock().lines();
+
+        lines.next();
+
+        let a = lines
+            .next()
+            .map(|x| {
+                x.unwrap()
+                    .split_whitespace()
+                    .map(|x| x.parse::<i32>().unwrap())
+                    .collect()
+            })
+            .unwrap();
+        //        println!("a: {:?}", a);
+
+        let b = lines
+            .next()
+            .map(|x| {
+                x.unwrap()
+                    .split_whitespace()
+                    .map(|x| x.parse::<i32>().unwrap())
+                    .collect()
+            })
+            .unwrap();
+        //        println!("b: {:?}", b);
+
+        let res = calc(a, b);
+        println!("{}", res);
+    }
+
+    fn calc(mut a: Vec<i32>, mut b: Vec<i32>) -> u64 {
+        let mut total_killed = 0u64;
+        for i in 0..b.len() {
+            let killed = std::cmp::min(a[i], b[i]);
+            total_killed += killed as u64;
+            a[i] -= killed;
+            b[i] -= killed;
+
+            let killed = std::cmp::min(a[i + 1], b[i]);
+            total_killed += killed as u64;
+            a[i + 1] -= killed;
+            b[i] -= killed;
+        }
+        total_killed
     }
 }
 
